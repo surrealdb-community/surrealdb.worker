@@ -25,7 +25,7 @@ function emptyReturn(): VueQuery<any> {
   }
 }
 
-function vue<C extends WorkerContent>(c: WrapWorkerContent<C>) {
+export function vue<C extends WorkerContent>(c: WrapWorkerContent<C>) {
   return {
     query: new Proxy({} as any, {
       ...proxyHandler,

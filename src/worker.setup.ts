@@ -1,6 +1,6 @@
 import { lockUntilDeath } from "./shared"
 
-export async function strartWorker(uri: URL, name = 'surrealdb') {
+export async function strartWorker(uri: URL, name = 'default') {
   if(SharedWorker) {
     new SharedWorker(uri, {name})
     return
