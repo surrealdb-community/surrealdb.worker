@@ -1,0 +1,28 @@
+{
+  "name": "surrealdb.worker",
+  "version": "0.0.0",
+  "description": "Use surrealdb.js in workers!",
+  "main": "./dist/index.js",
+  "type": "module",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/mathe42/surrealdb.worker.git"
+  },
+  "author": {
+    "name": "Sebastian Krüger",
+    "url": "https://github.com/mathe42"
+  },
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/mathe42/surrealdb.worker/issues"
+  },
+  "homepage": "https://github.com/mathe42/surrealdb.worker#readme",
+  "dependencies": {
+    "nanoid": "^4.0.0",
+    "surrealdb.js": "^0.5.0",
+    "vue": "^3.2.39"
+  }
+}
