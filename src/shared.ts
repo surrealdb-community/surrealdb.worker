@@ -39,10 +39,26 @@ export type WorkerContent = {
 };
 
 export function lockUntilDeath(name: string) {
-  return new Promise((res) => {
+  return new Promise<void>((res) => {
     navigator.locks.request(name, async () => {
       res()
       await new Promise(() => {})
     })
   })
+}
+
+export function resolvablePromise() {
+  let r = () => {};
+  const p = new Promise<void>((res) => {
+    r = res;
+  });
+
+  return {
+    promise: p,
+    resolve: r,
+  };
+}
+
+export function sleep(ms: number) {
+  return new Promise((res) => setTimeout(res, ms))
 }

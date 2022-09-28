@@ -1,5 +1,10 @@
 {
   "compilerOptions": {
-    "moduleResolution": "Node16"
+    "moduleResolution": "Node16",
+    "lib": [
+      "DOM",
+      "ES2020"
+    ],
+    "isolatedModules": true
   }
 }

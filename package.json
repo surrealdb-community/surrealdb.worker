@@ -4,9 +4,7 @@
   "description": "Use surrealdb.js in workers!",
   "main": "./dist/index.js",
   "type": "module",
-  "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
-  },
+  "scripts": {},
   "repository": {
     "type": "git",
     "url": "git+https://github.com/mathe42/surrealdb.worker.git"
@@ -21,8 +19,13 @@
   },
   "homepage": "https://github.com/mathe42/surrealdb.worker#readme",
   "dependencies": {
-    "nanoid": "^4.0.0",
-    "surrealdb.js": "^0.5.0",
+    "surrealdb.js": "^0.5.0"
+  },
+  "peerDependencies": {
+    "nanoid": "^4.0.0"
+  },
+  "devDependencies": {
+    "@preact/signals-core": "^1.2.0",
     "vue": "^3.2.39"
   }
 }

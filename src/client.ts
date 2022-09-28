@@ -169,3 +169,42 @@ export function setupClient<C extends WorkerContent>(name = "default"): WrapWork
 }
 
 type QueryRequest<C extends WorkerContent> = DataRequest<C, 'query'>
+
+function cache<T = any>() {
+  const map = new Map<string, T>()
+  
+  return (name: string, fnObj: () => T) => {
+    if(!map.has(name)) {
+      map.set(name, fnObj())
+    } 
+
+    return map.get(name)!
+  }
+}
+
+
+export function contentWrapper(
+  query: (fn: (...args: unknown[]) => Promise<unknown>) => (...args: unknown[]) => any,
+  live: (fn: (...args: unknown[]) => LiveWrapper<unknown>) => (...args: unknown[]) => any
+): <C extends WorkerContent>(c: WrapWorkerContent<C>) => any {
+  return <C extends WorkerContent>(c: WrapWorkerContent<C>) => {
+    const liveCache = cache()
+    const queryCache = cache()
+
+    return {
+      query: new Proxy({} as any, {
+        ...proxyHandler,
+        get(_, p: string) {
+          return queryCache(p, () => query(c.query[p]))
+        },
+      }),
+      live: new Proxy({} as any, {
+        ...proxyHandler,
+        get(_, p: string) {
+          return liveCache(p, () => live(c.live[p]))
+        },
+      }),
+    };
+  }
+   
+}
