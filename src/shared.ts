@@ -1,18 +1,17 @@
 import type * as SDB from "surrealdb.js";
 import { Live } from "./deps.js";
 
-
 export const MAIN_BC = "@surrealdb@main@";
 export const ALL_PREFIX = "@surrealdb@";
 
 export interface KillRequest<CONTENT extends WorkerContent> {
-  method: 'kill';
+  method: "kill";
   id: string;
 }
 export type DataRequest<
   CONTENT extends WorkerContent,
-  METHOD extends "query" | "live" = 'query' | 'live',
-  NAME extends keyof CONTENT[METHOD] = keyof CONTENT[METHOD]
+  METHOD extends "query" | "live" = "query" | "live",
+  NAME extends keyof CONTENT[METHOD] = keyof CONTENT[METHOD],
 > = {
   id: string;
   method: METHOD;
@@ -26,7 +25,7 @@ export interface StartRequest {
 }
 
 export type Return = {
-  type: 'return';
+  type: "return";
   id: string;
   err: any;
   res: any;
@@ -42,10 +41,10 @@ export type WorkerContent = {
 export function lockUntilDeath(name: string) {
   return new Promise<void>((res) => {
     navigator.locks.request(name, async () => {
-      res()
-      await new Promise(() => {})
-    })
-  })
+      res();
+      await new Promise(() => {});
+    });
+  });
 }
 
 export function resolvablePromise() {
@@ -61,5 +60,5 @@ export function resolvablePromise() {
 }
 
 export function sleep(ms: number) {
-  return new Promise((res) => setTimeout(res, ms))
+  return new Promise((res) => setTimeout(res, ms));
 }

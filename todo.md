@@ -1,1 +1,2 @@
-* Live (waiting on surrealdb + surrealdb.js)
+- Live (waiting on surrealdb + surrealdb.js)
+- Documentation

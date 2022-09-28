@@ -31,7 +31,9 @@ function emptyReturn(): VueReturn<any> {
   };
 }
 
-export const vue: <C extends WorkerContent>(c: WrapWorkerContent<C>) => VueWrapWorkerContent<C> = contentWrapper(
+export const vue: <C extends WorkerContent>(
+  c: WrapWorkerContent<C>,
+) => VueWrapWorkerContent<C> = contentWrapper(
   (fn) => {
     return (...args) => {
       const promise = fn(...args);
@@ -43,7 +45,7 @@ export const vue: <C extends WorkerContent>(c: WrapWorkerContent<C>) => VueWrapW
       ).finally(() => ret.loading.value = false);
 
       return ret;
-    }
+    };
   },
   (fn) => {
     return (...args) => {
@@ -54,5 +56,5 @@ export const vue: <C extends WorkerContent>(c: WrapWorkerContent<C>) => VueWrapW
 
       return ret;
     };
-  }
-)
+  },
+);

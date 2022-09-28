@@ -1,6 +1,6 @@
 import { contentWrapper, WrapWorkerContent } from "../client.js";
 import { WorkerContent } from "../shared.js";
-import { signal, Signal } from "@preact/signals-core";
+import { Signal, signal } from "@preact/signals-core";
 import { Live } from "../deps.js";
 
 export type ReactReturn<T = any> = {
@@ -18,7 +18,8 @@ export type ReactWrapWorkerContent<C extends WorkerContent> = {
   live: {
     [K in keyof C["live"]]: (
       ...args: Parameters<C["live"][K]>
-    ) => Awaited<ReturnType<C["live"][K]>> extends Live<infer X> ? ReactReturn<X>
+    ) => Awaited<ReturnType<C["live"][K]>> extends Live<infer X>
+      ? ReactReturn<X>
       : never;
   };
 };
@@ -31,7 +32,9 @@ function emptyReturn(): ReactReturn<any> {
   };
 }
 
-export const vue: <C extends WorkerContent>(c: WrapWorkerContent<C>) => ReactWrapWorkerContent<C> = contentWrapper(
+export const react: <C extends WorkerContent>(
+  c: WrapWorkerContent<C>,
+) => ReactWrapWorkerContent<C> = contentWrapper(
   (fn) => {
     return (...args) => {
       const promise = fn(...args);
@@ -43,7 +46,7 @@ export const vue: <C extends WorkerContent>(c: WrapWorkerContent<C>) => ReactWra
       ).finally(() => ret.loading.value = false);
 
       return ret;
-    }
+    };
   },
   (fn) => {
     return (...args) => {
@@ -54,5 +57,5 @@ export const vue: <C extends WorkerContent>(c: WrapWorkerContent<C>) => ReactWra
 
       return ret;
     };
-  }
-)
+  },
+);

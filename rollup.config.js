@@ -6,125 +6,125 @@ import dts from "rollup-plugin-dts";
 export default defineConfig([
   {
     input: {
-      'client': './src/client.ts',
-      'worker.setup': './src/worker.setup.ts',
-      'framework/vue': './src/framework/vue.ts',
-      'framework/react': './src/framework/react.ts',
-      worker: './src/worker.ts'
+      "client": "./src/client.ts",
+      "worker.setup": "./src/worker.setup.ts",
+      "framework/vue": "./src/framework/vue.ts",
+      "framework/react": "./src/framework/react.ts",
+      worker: "./src/worker.ts",
     },
     output: {
-      dir: './dist',
-      format: 'esm',
-      sourcemap: true
+      dir: "./dist",
+      format: "esm",
+      sourcemap: true,
     },
     plugins: [
       {
-        name: 'ws',
+        name: "ws",
         resolveId(id) {
-          if(id === 'isomorphic-ws') {
-            return 'ws'
+          if (id === "isomorphic-ws") {
+            return "ws";
           }
         },
         load(id) {
-          if(id === 'ws') {
+          if (id === "ws") {
             return `
               export default WebSocket
-            ` 
+            `;
           }
-        }
+        },
       },
       node(),
       esbuild({
-        sourceMap: true
-      })
+        sourceMap: true,
+      }),
     ],
     external: [
-      'vue',
-      '@preact/signal-core',
-      'nanoid',
-      'surrealdb.js'
+      "vue",
+      "@preact/signals-core",
+      "nanoid",
+      "surrealdb.js",
     ],
   },
   {
     input: {
-      worker: './src/worker.ts'
+      worker: "./src/worker.ts",
     },
     output: {
-      dir: './dist/umd',
-      format: 'umd',
-      name: 'SurrealWorker',
-      globals: 'setupWorker',
+      dir: "./dist/umd",
+      format: "umd",
+      name: "SurrealWorker",
+      globals: "setupWorker",
     },
     plugins: [
       {
-        name: 'ws',
+        name: "ws",
         resolveId(id) {
-          if(id === 'isomorphic-ws') {
-            return 'ws'
+          if (id === "isomorphic-ws") {
+            return "ws";
           }
         },
         load(id) {
-          if(id === 'ws') {
+          if (id === "ws") {
             return `
               export default WebSocket
-            ` 
+            `;
           }
-        }
+        },
       },
       node(),
       esbuild({
         minify: false,
-        sourceMap: true
+        sourceMap: true,
       }),
-    ]
+    ],
   },
   {
     input: {
-      testing: './src/_test_/mod.ts'
+      testing: "./src/_test_/mod.ts",
     },
     output: {
-      dir: './dist-test',
-      format: 'esm'
+      dir: "./dist-test",
+      format: "esm",
     },
     plugins: [
       {
-        name: 'ws',
+        name: "ws",
         resolveId(id) {
-          if(id === 'isomorphic-ws') {
-            return 'ws'
+          if (id === "isomorphic-ws") {
+            return "ws";
           }
         },
         load(id) {
-          if(id === 'ws') {
+          if (id === "ws") {
             return `
               export default WebSocket
-            ` 
+            `;
           }
-        }
+        },
       },
       node(),
       esbuild({
-        minify: true
+        minify: true,
       }),
     ],
     external: [
-      'surrealdb.js',
-      'vue'
-    ]
+      "surrealdb.js",
+      "vue",
+    ],
   },
   {
     input: {
-      worker: './dts-tmp/worker.d.ts',
-      'worker.setup': './dts-tmp/worker.setup.d.ts',
-      client: './dts-tmp/client.d.ts',
-      'framework/vue': './dts-tmp/framework/vue.d.ts',
-      'framework/react': './dts-tmp/framework/react.d.ts',
+      worker: "./dts-tmp/worker.d.ts",
+      "worker.setup": "./dts-tmp/worker.setup.d.ts",
+      client: "./dts-tmp/client.d.ts",
+      "framework/vue": "./dts-tmp/framework/vue.d.ts",
+      "framework/react": "./dts-tmp/framework/react.d.ts",
     },
     output: {
-      dir: './dist'
+      dir: "./dist",
     },
     plugins: [
-      dts()
-    ]
-  }
-])
+      dts(),
+    ],
+  },
+]);

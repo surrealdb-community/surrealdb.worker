@@ -1,17 +1,31 @@
-import { lockUntilDeath, resolvablePromise, sleep } from "./shared.js";
+import { lockUntilDeath, resolvablePromise } from "./shared.js";
 
 /**
  * This is run by all tabs / workers that want access to the client
- * 
- * The lock `"@surrealdb@workergen@" + name` is used so that only 1 
- * 
+ *
+ * The lock `"@surrealdb@workergen@" + name` is used so that only 1
+ *
  * @param uri URL to worker file
  * @param name name of Worker (use this if you want multiple instances!)
  */
-export async function strartWorker(uri: URL, name = "default") {
+export function strartWorker(uri: URL | string, name = "default") {
+  return strartWorkerWithFn({
+    sharedWorker: () => new SharedWorker(uri, { name }),
+    worker: () => new Worker(uri, { name }),
+  });
+}
+
+/**
+ * DONT USE IT UNLESS YOU KNOW WHAT YOU ARE DOING!
+ * THIS IS MOSTLY USED INTERNALY FOR THE VITE PLUGIN!
+ */
+export async function strartWorkerWithFn(worker: {
+  sharedWorker: () => SharedWorker;
+  worker: () => Worker;
+}, name = "default") {
   // When we have SharedWorker this is simple!
   if (SharedWorker) {
-    new SharedWorker(uri, { name });
+    worker.sharedWorker();
     return;
   }
 
@@ -22,21 +36,20 @@ export async function strartWorker(uri: URL, name = "default") {
 
   // Run this inifinite as we might have multiple worker kills
   while (true) {
-    const { resolve: resolveMessageRecieved, promise: messageRecieved } = resolvablePromise();
+    const { resolve: resolveMessageRecieved, promise: messageRecieved } =
+      resolvablePromise();
 
     // This lock is granted if no worker is running (anymore)
     // Then we create a new worker and wait till it is alive
-    // Then we sleep for 20s to make sure the worker is setup correctly
+    // and has taken over the lock
     // Then we loop
-    navigator.locks.request("@surreldb@worker@" + name, async () => {
-      const w = new Worker(uri, { name });
-  
+    navigator.locks.request("@surrealdb@main@" + name, () => {
+      const w = worker.worker();
+
       w.addEventListener("message", () => resolveMessageRecieved());
-  
-      await messageRecieved;
     });
 
+    // Worker is running and has locked!
     await messageRecieved;
-    await sleep(20 * 1000)
   }
 }

@@ -1,3 +1,3 @@
-import type * as SDB from 'surrealdb.js'
+import type * as SDB from "surrealdb.js";
 // TODO: Replace with real implementation
-export type Live<T = any> = ReturnType<SDB.default['sync']>
+export type Live<T = any> = ReturnType<SDB.default["sync"]>;
