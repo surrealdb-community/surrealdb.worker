@@ -1,6 +1,7 @@
 import { MAIN_BC, WorkerContent, StartRequest, ALL_PREFIX, Return, DataRequest, lockUntilDeath } from "./shared.js";
-import { Live, nanoid } from "./deps.js";
+import { nanoid } from "nanoid";
 import { newId } from "./utils/id.js";
+import { Live } from "./deps.js";
 
 export class LiveWrapper<T = any> {
   constructor(private id: string,private name:string, private bc: BroadcastChannel, private args: any[]) {}

@@ -1,8 +1,3 @@
-export * from 'surrealdb.js'
-export { default as Surreal } from 'surrealdb.js'
-export * from 'nanoid'
-
-// TODO import it from surreal.js
-export class Live<T = unknown> {
-  kill() {}
-}
+import type * as SDB from 'surrealdb.js'
+// TODO: Replace with real implementation
+export type Live<T = any> = ReturnType<SDB.default['sync']>

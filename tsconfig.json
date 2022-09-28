@@ -1,10 +1,19 @@
 {
   "compilerOptions": {
+    "target": "ESNext",
     "moduleResolution": "Node16",
     "lib": [
       "DOM",
-      "ES2020"
+      "ESNext"
     ],
-    "isolatedModules": true
-  }
+    "isolatedModules": false,
+    "emitDeclarationOnly": true,
+    "declaration": true,
+    "declarationDir": "dts-tmp",
+    "skipLibCheck": true,
+    "allowSyntheticDefaultImports": false
+  },
+  "include": [
+    "./src/**/*.ts"
+  ]
 }

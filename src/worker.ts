@@ -1,11 +1,12 @@
-import { Surreal, Live } from "./deps.js";
+import { Live } from "./deps.js";
+import * as SDB from "surrealdb.js";
 import { WorkerContent, fn, Return, MAIN_BC, ALL_PREFIX, StartRequest, DataRequest, KillRequest, lockUntilDeath } from "./shared.js";
 
 export async function setupWorker<CONTENT extends WorkerContent>(c: CONTENT, name = "default") {
   await lockUntilDeath('@surreldb@worker@' + name)
   self.postMessage('LOCKED')
   
-  let client: Surreal;
+  let client: SDB.default;
   let mainBC: BroadcastChannel;
 
   const liveClients = new Map<string, Map<string, LiveWraper>>()
@@ -101,7 +102,7 @@ export async function setupWorker<CONTENT extends WorkerContent>(c: CONTENT, nam
   }
 
   return function init(url: string, token?: string) {
-    client = new Surreal(url, token);
+    client = new SDB.default(url, token);
     mainBC = new BroadcastChannel(MAIN_BC + name);
     const prefix = ALL_PREFIX + name + "@";
 

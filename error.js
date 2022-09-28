@@ -1,0 +1,1 @@
+throw new Error('You have to import something! Import `surrealdb.worker/...`')

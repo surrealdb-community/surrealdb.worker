@@ -1,4 +1,5 @@
-import { Surreal, Live } from "./deps.js";
+import type * as SDB from "surrealdb.js";
+import { Live } from "./deps.js";
 
 
 export const MAIN_BC = "@surrealdb@main@";
@@ -31,9 +32,9 @@ export type Return = {
   res: any;
 };
 
-export type fn<T> = (con: Surreal, ...args: unknown[]) => T;
+export type fn<T> = (con: SDB.default, ...args: unknown[]) => T;
 export type WorkerContent = {
-  startup: (con: Surreal) => Promise<void>;
+  startup: (con: SDB.default) => Promise<void>;
   query: Record<string, fn<Promise<unknown>>>;
   live: Record<string, fn<Live | Promise<Live>>>;
 };
