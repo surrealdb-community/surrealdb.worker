@@ -3,7 +3,31 @@ import esbuild from "rollup-plugin-esbuild";
 import node from "@rollup/plugin-node-resolve";
 import dts from "rollup-plugin-dts";
 
+import { sync } from "rimraf";
+sync('./dist')
+sync('./dist-test')
+
+const nodePackages = {
+  name: "ws",
+  resolveId(id, importer) {
+    if (id === "isomorphic-ws") {
+      return "ws";
+    }
+    if(id === "nanoid") {
+      return this.resolve('nanoid/index.borwser.js', importer).then(v=>v?v.id:null)
+    }
+  },
+  load(id) {
+    if (id === "ws") {
+      return `
+        export default WebSocket
+      `;
+    }
+  },
+}
+
 export default defineConfig([
+  // Build all
   {
     input: {
       "client": "./src/client.ts",
@@ -18,22 +42,6 @@ export default defineConfig([
       sourcemap: true,
     },
     plugins: [
-      {
-        name: "ws",
-        resolveId(id) {
-          if (id === "isomorphic-ws") {
-            return "ws";
-          }
-        },
-        load(id) {
-          if (id === "ws") {
-            return `
-              export default WebSocket
-            `;
-          }
-        },
-      },
-      node(),
       esbuild({
         sourceMap: true,
       }),
@@ -45,6 +53,7 @@ export default defineConfig([
       "surrealdb.js",
     ],
   },
+  // Build umd
   {
     input: {
       worker: "./src/worker.ts",
@@ -56,21 +65,7 @@ export default defineConfig([
       globals: "setupWorker",
     },
     plugins: [
-      {
-        name: "ws",
-        resolveId(id) {
-          if (id === "isomorphic-ws") {
-            return "ws";
-          }
-        },
-        load(id) {
-          if (id === "ws") {
-            return `
-              export default WebSocket
-            `;
-          }
-        },
-      },
+      nodePackages,
       node(),
       esbuild({
         minify: false,
@@ -78,6 +73,7 @@ export default defineConfig([
       }),
     ],
   },
+  // Build test to get size
   {
     input: {
       testing: "./src/_test_/mod.ts",
@@ -87,21 +83,7 @@ export default defineConfig([
       format: "esm",
     },
     plugins: [
-      {
-        name: "ws",
-        resolveId(id) {
-          if (id === "isomorphic-ws") {
-            return "ws";
-          }
-        },
-        load(id) {
-          if (id === "ws") {
-            return `
-              export default WebSocket
-            `;
-          }
-        },
-      },
+      nodePackages,
       node(),
       esbuild({
         minify: true,
@@ -112,6 +94,7 @@ export default defineConfig([
       "vue",
     ],
   },
+  // Build types
   {
     input: {
       worker: "./dts-tmp/worker.d.ts",
