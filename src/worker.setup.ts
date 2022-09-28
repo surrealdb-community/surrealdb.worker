@@ -8,7 +8,7 @@ import { lockUntilDeath, resolvablePromise } from "./shared.js";
  * @param uri URL to worker file
  * @param name name of Worker (use this if you want multiple instances!)
  */
-export function strartWorker(uri: URL | string, name = "default") {
+export function startWorker(uri: URL | string, name = "default") {
   return strartWorkerWithFn({
     sharedWorker: () => new SharedWorker(uri, { name }),
     worker: () => new Worker(uri, { name }),

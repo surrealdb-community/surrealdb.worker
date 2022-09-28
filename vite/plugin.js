@@ -1,4 +1,3 @@
-// @ts-check
 import { readFileSync } from "fs";
 
 const template = readFileSync("./template.js", "utf-8");

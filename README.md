@@ -13,6 +13,7 @@ config object that lives in the Worker.
 > NOTE: If the browser of the user supports SharedWorker it is a good idea to
 > use it!
 
+![model of surrealdb.worker](./model.png)
 ## Live Querys
 
 This is build with live querys in mind so as soon as they are available they are
@@ -33,7 +34,20 @@ brotli you get that to 1-2KB!
 import { setupWorker } from "surrealdb.worker/dist/worker.js";
 
 export const config = {
-  /** */
+  query: {
+    name: (con: Surreal) => {
+      // We get the db connection instance and have 
+      // to return a promise of X or X where X is 
+      // a JSON-stringifyable object
+    }
+  },
+  live: {
+    name: (con: Surreal) => {
+      // We get the db connection instance and have 
+      // to return a promise of X or X where X is 
+      // a Live instance (from surrealdb.js)
+    }
+  }
 };
 
 setupWorker(config).then((init) => {
@@ -47,9 +61,9 @@ setupWorker(config).then((init) => {
 ## In client to start worker
 
 ```ts
-import { strartWorker } from "surrealdb.worker/dist/worker.setup.js";
+import { startWorker } from "surrealdb.worker/dist/worker.setup.js";
 
-strartWorker(new URL("./path/to/worker/file", import.meta.url));
+startWorker(new URL("./path/to/worker/file", import.meta.url));
 ```
 
 ## in client to setup cliet
@@ -65,6 +79,17 @@ import { vue } from "surrealdb.worker/dist/framework/vue.js";
 const vueClient = vue<typeof config>(client);
 ```
 
+To call a function from the client just run
+
+```ts
+client.query.name(/* my args */)
+client.live.name(/* my args */)
+```
+
+Same is true for the vue and the react client wrapper they just return something different.
+
+### Performance
+You should only create 1 client per tab! And each tab should call `startWorker`.
 ## Frameworks
 
 As I will use this with Vue I added a wrapper for that. I also added a react

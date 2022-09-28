@@ -1,6 +1,5 @@
 import {
   ALL_PREFIX,
-  DataRequest,
   lockUntilDeath,
   MAIN_BC,
   Return,
@@ -39,12 +38,12 @@ export type WrapWorkerContent<C extends WorkerContent> = {
   query: {
     [K in keyof C["query"]]: (
       ...args: Parameters<C["query"][K]>
-    ) => ReturnType<C["query"][K]>;
+    ) => Promise<Awaited<ReturnType<C["query"][K]>>>;
   };
   live: {
     [K in keyof C["live"]]: (
       ...args: Parameters<C["live"][K]>
-    ) => ReturnType<C["live"][K]> extends Live<infer X> ? LiveWrapper<X>
+    ) => Awaited<ReturnType<C["live"][K]>> extends Live<infer X> ? LiveWrapper<X>
       : never;
   };
 };
@@ -151,7 +150,7 @@ export function setupClient<C extends WorkerContent>(
   });
 
   const liveActive = new Map<string, Map<string, LiveWrapper>>();
-
+  
   return {
     query: new Proxy({} as any, {
       ...proxyHandler,
@@ -160,7 +159,7 @@ export function setupClient<C extends WorkerContent>(
           const id = reqId();
 
           bc.dispatchEvent(
-            new MessageEvent<QueryRequest<C>>("message", {
+            new MessageEvent("message", {
               data: {
                 id,
                 method: "query",
@@ -199,7 +198,6 @@ export function setupClient<C extends WorkerContent>(
   };
 }
 
-type QueryRequest<C extends WorkerContent> = DataRequest<C, "query">;
 
 function cache<T = any>() {
   const map = new Map<string, T>();
