@@ -10,7 +10,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/mathe42/surrealdb.worker.git"
+    "url": "git+https://github.com/surrealdb-community/surrealdb.worker.git"
   },
   "author": {
     "name": "Sebastian Krüger",
@@ -18,9 +18,9 @@
   },
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/mathe42/surrealdb.worker/issues"
+    "url": "https://github.com/surrealdb-community/surrealdb.worker/issues"
   },
-  "homepage": "https://github.com/mathe42/surrealdb.worker#readme",
+  "homepage": "https://github.com/surrealdb-community/surrealdb.worker#readme",
   "peerDependencies": {
     "nanoid": "^4.0.0",
     "surrealdb.js": "^0.5.0"
