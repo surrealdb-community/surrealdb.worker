@@ -26,7 +26,7 @@
     "surrealdb.js": "^0.5.0"
   },
   "devDependencies": {
-    "@preact/signals-core": "1.2.1",
+    "@preact/signals-core": "1.8.0",
     "@rollup/plugin-node-resolve": "14.1.0",
     "esbuild": "0.15.10",
     "nanoid": "4.0.0",
